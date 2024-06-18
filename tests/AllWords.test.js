@@ -49,7 +49,7 @@ test(`Shows correct battery icons near words`, async () => {
   expect(icon.props.name).toContain("full");
 
   await act(async () => {
-    jest.advanceTimersByTime(constants.INITIAL_FORGETTING_SPAN);
+    jest.advanceTimersByTime(constants.INITIAL_FORGETTING_SPAN + 1);
     store.dispatch(wordsLearningActions.updateStatuses());
   });
 

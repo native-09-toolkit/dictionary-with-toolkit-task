@@ -7,6 +7,7 @@ module.exports = function (api) {
       "@babel/preset-typescript",
     ],
     plugins: [
+      "react-native-reanimated/plugin",
       "@babel/plugin-transform-flow-strip-types",
       "@babel/plugin-transform-private-methods",
       "@babel/plugin-transform-class-properties",
