@@ -1,11 +1,13 @@
-import { View, StyleSheet, Text, StatusBar, Pressable } from "react-native";
+import { View, StyleSheet } from "react-native";
 import StatisticsInfo from "../../components/StatisticsInfo";
 import ImagePile from "../../components/ImagePile";
-import { COLORS_DARK } from "../../constants";
+import { useSelector } from "react-redux";
 
 export default function Statistics() {
+  const colors = useSelector((state) => state.theme?.colors);
+
   return (
-    <View style={[styles.container, { backgroundColor: COLORS_DARK.appBackground }]}>
+    <View style={[styles.container, { backgroundColor: colors?.appBackground }]}>
       <StatisticsInfo />
       <ImagePile />
     </View>

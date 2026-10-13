@@ -3,10 +3,10 @@ import themeSlice from "./themeSlice";
 import wordsLearningSlice from "./wordsLearningSlice";
 
 const store = configureStore({
-  /*create root reducer here with prperty names written below: {
-    theme: 
-    wordsLearning: 
-  }*/
+  reducer: {
+    theme: themeSlice.reducer,
+    wordsLearning: wordsLearningSlice.reducer,
+  },
 });
 
 export default store;

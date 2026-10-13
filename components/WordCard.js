@@ -1,11 +1,15 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
 import { playSound } from "../services/soundHandler";
 import { COLORS_DARK } from "../constants";
+import { wordsLearningActions } from "../store/wordsLearningSlice";
 
 function WordCard({ wordInfo, setNext }) {
   const [showFullInfo, setShowFullInfo] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -14,23 +18,29 @@ function WordCard({ wordInfo, setNext }) {
         onPress={() => setShowFullInfo(true)}
       >
         <Text style={styles.word}>{wordInfo.word}</Text>
+
         {showFullInfo && (
           <>
             <Text style={styles.phonetics}>{wordInfo.phonetics}</Text>
-            <Pressable
-              style={styles.playPressable}
-              onPress={() => playSound(wordInfo.audio)}
-            >
-              <Ionicons
-                name="volume-medium-outline"
-                size={28}
-                color={COLORS_DARK.primary900}
-              />
-            </Pressable>
+
+            {wordInfo.audio ? (
+              <Pressable
+                style={styles.playPressable}
+                onPress={() => playSound(wordInfo.audio)}
+              >
+                <Ionicons
+                  name="volume-medium-outline"
+                  size={28}
+                  color={COLORS_DARK.primary900}
+                />
+              </Pressable>
+            ) : null}
+
             <Text style={styles.meaning}>{wordInfo.meaning}</Text>
           </>
         )}
       </Pressable>
+
       {showFullInfo && (
         <View style={styles.buttonsContainer}>
           <Pressable
@@ -48,9 +58,12 @@ function WordCard({ wordInfo, setNext }) {
           >
             <Text style={styles.rememberText}>Didn't know it</Text>
           </Pressable>
+
           <Pressable
             onPress={() => {
-              dispatch(wordsLearningActions.updateWordLearnInfo(wordInfo.word));
+              dispatch(
+                wordsLearningActions.updateWordLearnInfo(wordInfo.word)
+              );
               setShowFullInfo(false);
             }}
             style={({ pressed }) => [
@@ -111,6 +124,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     marginBottom: 10,
+  },
+  playPressable: {
+    marginHorizontal: 20,
   },
 });
 

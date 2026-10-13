@@ -7,15 +7,18 @@ import {
   Pressable,
 } from "react-native";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux"; // <--- Імпортуємо useDispatch
 
 import { getWordInfo } from "../../services/wordsHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { playSound } from "../../services/soundHandler";
 import { COLORS_DARK } from "../../constants";
+import { wordsLearningActions } from "../../store/wordsLearningSlice"; // <--- Імпортуємо екшени
 
 function AddWord({ navigation }) {
   const [text, setText] = useState();
   const [wordData, setWordData] = useState();
+  const dispatch = useDispatch(); // <--- Ініціалізуємо хук
 
   function onChangeText(text) {
     setWordData(undefined);
@@ -40,9 +43,19 @@ function AddWord({ navigation }) {
   }, [navigation, wordData]);
 
   function onAdd() {
-    navigation.navigate(
-      "AllWords"
-    );
+    if (wordData) {
+      // <--- Диспортимо екшен додавання слова у Redux store
+      dispatch(
+        wordsLearningActions.addWord({
+          word: wordData.word,
+          phonetics: wordData.phonetics,
+          audio: wordData.audio,
+          meaning: wordData.meaning,
+          partOfSpeech: wordData.partOfSpeech,
+        })
+      );
+    }
+    navigation.navigate("AllWords");
   }
 
   return (
@@ -103,70 +116,70 @@ function AddWord({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    input: {
-      height: 40,
-      fontSize: 18,
-      borderColor: COLORS_DARK.primary200,
-      borderWidth: 1,
-      borderRadius: 5,
-      padding: 10,
-      color: COLORS_DARK.fontMain,
-    },
-    label: {
-      fontSize: 12,
-      color: COLORS_DARK.grey600,
-      marginBottom: 4,
-    },
-    inputContainer: {
-      marginHorizontal: 12,
-    },
-    receivedInfoContainer: {
-      flex: 1,
-      paddingVertical: 8,
-      paddingHorizontal: 10,
-      fontSize: 32,
-    },
-    word: {
-      fontSize: 32,
-      paddingHorizontal: 10,
-      color: COLORS_DARK.fontMain,
-    },
-    phonetics: {
-      fontSize: 20,
-      paddingHorizontal: 10,
-      color: COLORS_DARK.fontMain,
-    },
-    partOfSpeech: {
-      fontSize: 20,
-      paddingHorizontal: 10,
-      color: COLORS_DARK.fontMain,
-    },
-    meaning: {
-      fontSize: 16,
-      padding: 13,
-      color: COLORS_DARK.fontMain,
-    },
-    buttonContainer: {
-      borderRadius: 4,
-      backgroundColor: COLORS_DARK.primary900,
-      height: 40,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    backPressable: {
-      position: "absolute",
-      width: 60,
-      borderRadius: 30,
-      aspectRatio: 1,
-      top: "2%",
-      left: "2%",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 10,
-    },
-    playPressable: {
-      marginHorizontal: 20,
-    },
-  });
+  input: {
+    height: 40,
+    fontSize: 18,
+    borderColor: COLORS_DARK.primary200,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    color: COLORS_DARK.fontMain,
+  },
+  label: {
+    fontSize: 12,
+    color: COLORS_DARK.grey600,
+    marginBottom: 4,
+  },
+  inputContainer: {
+    marginHorizontal: 12,
+  },
+  receivedInfoContainer: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    fontSize: 32,
+  },
+  word: {
+    fontSize: 32,
+    paddingHorizontal: 10,
+    color: COLORS_DARK.fontMain,
+  },
+  phonetics: {
+    fontSize: 20,
+    paddingHorizontal: 10,
+    color: COLORS_DARK.fontMain,
+  },
+  partOfSpeech: {
+    fontSize: 20,
+    paddingHorizontal: 10,
+    color: COLORS_DARK.fontMain,
+  },
+  meaning: {
+    fontSize: 16,
+    padding: 13,
+    color: COLORS_DARK.fontMain,
+  },
+  buttonContainer: {
+    borderRadius: 4,
+    backgroundColor: COLORS_DARK.primary900,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  backPressable: {
+    position: "absolute",
+    width: 60,
+    borderRadius: 30,
+    aspectRatio: 1,
+    top: "2%",
+    left: "2%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 10,
+  },
+  playPressable: {
+    marginHorizontal: 20,
+  },
+});
 
 export default AddWord;
